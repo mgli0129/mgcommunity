@@ -2,7 +2,7 @@ package com.mg.community.Provider;
 
 import com.alibaba.fastjson.JSON;
 import com.mg.community.dto.AccessTokenDTO;
-import com.mg.community.dto.GithubUserDTO;
+import com.mg.community.dto.GithubUser;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
@@ -24,12 +24,12 @@ public class GithubProvider {
             System.out.println(str);
             return str;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
         }
         return null;
     }
 
-    public GithubUserDTO getGithubUser(AccessTokenDTO accessTokenDTO) {
+    public GithubUser getGithubUser(AccessTokenDTO accessTokenDTO) {
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -38,11 +38,11 @@ public class GithubProvider {
         try {
             Response response = client.newCall(request).execute();
             String str = response.body().string();
-            GithubUserDTO githubUserDTO = JSON.parseObject(str,GithubUserDTO.class);
-            System.out.println(githubUserDTO);
-            return githubUserDTO;
+            GithubUser githubUser = JSON.parseObject(str, GithubUser.class);
+            System.out.println(githubUser);
+            return githubUser;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
         }
         return null;
     }

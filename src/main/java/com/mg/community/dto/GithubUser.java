@@ -3,7 +3,7 @@ package com.mg.community.dto;
 import lombok.Data;
 
 @Data
-public class GithubUserDTO {
+public class GithubUser {
     private String login;
     private String id;
     private String name;
