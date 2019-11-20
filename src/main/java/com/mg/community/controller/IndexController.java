@@ -6,13 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-public class HelloWorldController {
+public class IndexController {
 
-    @GetMapping("/demo/{name}")
-    public String demo(@PathVariable String name, Model model) {
-        name = name + " ^_^";
-        model.addAttribute("name", name);
-        return "demo";
+    @GetMapping("/")
+    public String index() {
+        return "index";
     }
 
 }
