@@ -8,10 +8,12 @@ import com.mg.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
@@ -36,7 +38,13 @@ public class GithubOAuthController {
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code,
                            @RequestParam("state") String state,
-                           HttpServletResponse response) {
+                           HttpServletRequest request,
+                           HttpServletResponse response,
+                           Model model) {
+        if (code == null || code.equals("")){
+            model.addAttribute("error","账户验证失败，请重新验证");
+            return "/";
+        }
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(githubClientId);
         accessTokenDTO.setClient_secret(githubClientSecret);
@@ -49,20 +57,28 @@ public class GithubOAuthController {
         String accessCode = accessToken.split("&")[0].split("=")[1];
         accessTokenDTO.setCode(accessCode);
         GithubUser githubUser = githubProvider.getGithubUser(accessTokenDTO);
-        if (githubUser != null) {
-            //登录成功，写入数据库
-            User user = new User();
-            user.setAccountId(githubUser.getLogin());
-            user.setName(githubUser.getName());
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
-            userMapper.insertUser(user);
 
+        if (githubUser != null) {
+            User accUser = userMapper.findUserByAccountId(githubUser.getLogin());
+            String token = null;
+            if(accUser == null){
+                //登录成功，写入数据库
+                User user = new User();
+                user.setAccountId(githubUser.getLogin());
+                user.setName(githubUser.getName());
+                token = UUID.randomUUID().toString();
+                user.setToken(token);
+                user.setAvatarUrl(githubUser.getAvatarUrl());
+                user.setGmtCreate(System.currentTimeMillis());
+                user.setGmtModified(user.getGmtCreate());
+                userMapper.insertUser(user);
+            }else{
+                token = accUser.getToken();
+            }
             //写入cookie
             Cookie cookie = new Cookie("token", token);
             response.addCookie(cookie);
+
             return "redirect:/";
         } else {
             //登录失败

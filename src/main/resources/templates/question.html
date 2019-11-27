@@ -1,32 +1,29 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>MG Community</title>
+    <title th:text="${toptitle}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/mgcommunity.css">
-    <script src="js/jquery-1.12.4.min.js"></script>
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/mgcommunity.css">
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
+
 <!--navigation including-->
 <div th:insert="~{navigation :: nav}"></div>
 
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-            <h3><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;发现</h3>
+            <br>
+            <h4>我的问题</h4>
             <hr>
             <div class="media" th:each="question:${questions}">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
-                    </a>
-                </div>
                 <div class="media-body">
                     <a href="#">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                        <h4 class="media-heading" th:text="${question.title}"></h4>
                     </a>
                     <span th:text="${question.content}"></span>
                     <br>
@@ -36,49 +33,48 @@
                 </div>
                 <hr>
             </div>
-
             <nav class="nav-right" aria-label="Page navigation">
                 <ul class="pagination pagination-lg">
                     <li th:if="${pageInfo.pageNum} &gt; 5" aria-label="Previous">
-                        <a th:href="@{/(pageNum=1)}" + aria-label="Previous">
+                        <a th:href="@{/profile/question/question/(pageNum=1)}" + aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li th:if="${pageInfo.hasPreviousPage}">
-                        <a th:href="@{/(pageNum=${pageInfo.getPrePage()})}">
+                        <a th:href="@{/profile/question/question/(pageNum=${pageInfo.getPrePage()})}">
                             <span aria-hidden="true">&lsaquo;</span>
                         </a>
                     </li>
                     <li th:each="pageNum:${pageInfo.navigatepageNums}"
                         th:class="${pageInfo.pageNum == pageNum}? 'active' : ''">
-                        <a th:href="@{/(pageNum=
+                        <a th:href="@{/profile/question/question/(pageNum=
 			${pageNum})}" th:text="${pageNum}">
                         </a>
                     </li>
                     <li th:if="${pageInfo.hasNextPage}">
-                        <a th:href="@{/(pageNum=
+                        <a th:href="@{/profile/question/question/(pageNum=
 			${pageInfo.getNextPage()})}">
                             <span aria-hidden="true">&rsaquo;</span>
                         </a>
                     </li>
                     <li th:if="${pageInfo.pageNum <= pageInfo.total}" aria-label="Next">
-                        <a th:href="@{/(pageNum=
+                        <a th:href="@{/profile/question/question/(pageNum=
 			${pageInfo.total})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                 </ul>
             </nav>
-
-            <div class="alert alert-danger" style="margin-top:60px;" role="alert" th:if="${error != null}">
-                <p th:text="${error}"></p>
-            </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
             <br>
-            <h4>热门话题</h4>
-            <br>
+            <div class="list-group">
+                <a href="/profile/question/question" class="list-group-item active">我的提问</a>
+                <a href="/profile/follow/follow" class="list-group-item">我的关注</a>
+                <a href="#" class="list-group-item">我的回答</a>
+            </div>
         </div>
+
     </div>
 </div>
 

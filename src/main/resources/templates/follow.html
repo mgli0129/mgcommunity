@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${toptitle}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/mgcommunity.css">
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+
+<!--navigation including-->
+<div th:insert="~{navigation :: nav}"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+            <br>
+            <h4>我的关注</h4>
+            <hr>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            <br>
+            <div class="list-group">
+                <a href="/profile/question/question" class="list-group-item" >我的提问</a>
+                <a href="/profile/follow/follow" class="list-group-item active">我的关注</a>
+                <a href="#" class="list-group-item">我的回答</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
