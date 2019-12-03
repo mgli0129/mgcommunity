@@ -16,7 +16,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/question/{id}")
-    public String question(@PathVariable("id") int id,
+    public String question(@PathVariable("id") Integer id,
                            Model model) {
         QuestionDTO questionDTO = questionService.findQuestionById(id);
         model.addAttribute("question", questionDTO);
@@ -25,7 +25,7 @@ public class QuestionController {
     }
 
     @PostMapping("/reply/{id}")
-    public String reply(@PathVariable("id") int id,
+    public String reply(@PathVariable("id") Integer id,
                         Model model){
         return null;
     }

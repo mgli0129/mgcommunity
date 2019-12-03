@@ -2,7 +2,6 @@ package com.mg.community.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mg.community.mapper.UserMapper;
 import com.mg.community.model.Question;
 import com.mg.community.model.User;
 import com.mg.community.service.QuestionService;
@@ -18,9 +17,6 @@ import java.util.List;
 
 @Controller
 public class ProfileController {
-
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private QuestionService questionService;

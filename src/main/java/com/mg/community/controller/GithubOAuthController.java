@@ -3,9 +3,8 @@ package com.mg.community.controller;
 import com.mg.community.Provider.GithubProvider;
 import com.mg.community.dto.AccessTokenDTO;
 import com.mg.community.dto.GithubUser;
-import com.mg.community.mapper.UserMapper;
 import com.mg.community.model.User;
-import com.mg.community.model.UserExample;
+import com.mg.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -26,7 +24,7 @@ public class GithubOAuthController {
     private GithubProvider githubProvider;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Value("${github.client.id}")
     private String githubClientId;
@@ -61,11 +59,9 @@ public class GithubOAuthController {
         GithubUser githubUser = githubProvider.getGithubUser(accessTokenDTO);
 
         if (githubUser != null) {
-            UserExample userExample = new UserExample();
-            userExample.createCriteria().andAccountIdEqualTo(githubUser.getLogin());
-            List<User> userList = userMapper.selectByExample(userExample);
+            User userAcc = userService.findByAccountId(githubUser.getLogin());
             String token = null;
-            if(userList.size() == 0){
+            if(userAcc != null){
                 //登录成功，写入数据库
                 User user = new User();
                 user.setAccountId(githubUser.getLogin());
@@ -73,11 +69,9 @@ public class GithubOAuthController {
                 token = UUID.randomUUID().toString();
                 user.setToken(token);
                 user.setAvatarUrl(githubUser.getAvatarUrl());
-                user.setGmtCreate(System.currentTimeMillis());
-                user.setGmtModified(user.getGmtCreate());
-                userMapper.insert(user);
+                userService.createOrUpdate(user);
             }else{
-                token = userList.get(0).getToken();
+                token = userAcc.getToken();
             }
             //写入cookie
             Cookie cookie = new Cookie("token", token);

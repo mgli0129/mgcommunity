@@ -2,11 +2,11 @@ package com.mg.community.service.impl;
 
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.mapper.QuestionMapper;
-import com.mg.community.mapper.UserMapper;
 import com.mg.community.model.Question;
 import com.mg.community.model.QuestionExample;
 import com.mg.community.model.User;
 import com.mg.community.service.QuestionService;
+import com.mg.community.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Autowired
     private QuestionMapper questionMapper;
@@ -41,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionDTO questionDTO = new QuestionDTO();
             //copy object
             BeanUtils.copyProperties(question, questionDTO);
-            User user = userMapper.selectByPrimaryKey(question.getCreator());
+            User user = userService.findById(question.getCreator());
             questionDTO.setUser(user);
             questionDTOs.add(questionDTO);
         }
@@ -61,17 +61,20 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = questionMapper.selectByPrimaryKey(id);
         //copy object
         BeanUtils.copyProperties(question, questionDTO);
-        User user = userMapper.selectByPrimaryKey(question.getCreator());
+        User user = userService.findById(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
 
     @Override
     public void createOrUpdate(Question question) {
-        if(question.getId() == 0){
+        if(question.getId() == null){
             //Insert
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setCommentCount(0);
+            question.setLikeCount(0);
+            question.setViewCount(0);
             questionMapper.insert(question);
         }else{
             //Update
