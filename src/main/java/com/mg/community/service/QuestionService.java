@@ -22,4 +22,8 @@ public interface QuestionService {
     List<QuestionDTO> findAllDTO(List<Question> questions);
 
     List<Question> findQuestionByCreator(int creator);
+
+    QuestionDTO findQuestionById(int id);
+
+    void createOrUpdate(Question question);
 }

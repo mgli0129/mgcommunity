@@ -4,6 +4,7 @@ import com.mg.community.dto.QuestionDTO;
 import com.mg.community.mapper.QuestionMapper;
 import com.mg.community.mapper.UserMapper;
 import com.mg.community.model.Question;
+import com.mg.community.model.QuestionExample;
 import com.mg.community.model.User;
 import com.mg.community.service.QuestionService;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +25,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> findAll() {
-        return questionMapper.selectAll();
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria();
+        return questionMapper.selectByExample(questionExample);
     }
 
     @Override
@@ -38,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
             QuestionDTO questionDTO = new QuestionDTO();
             //copy object
             BeanUtils.copyProperties(question, questionDTO);
-            User user = userMapper.findUserById(question.getCreator());
+            User user = userMapper.selectByPrimaryKey(question.getCreator());
             questionDTO.setUser(user);
             questionDTOs.add(questionDTO);
         }
@@ -47,6 +50,35 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> findQuestionByCreator(int creator) {
-        return questionMapper.selectQuestionByCreator(creator);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andCreatorEqualTo(creator);
+        return questionMapper.selectByExample(questionExample);
+    }
+
+    @Override
+    public QuestionDTO findQuestionById(int id) {
+        QuestionDTO questionDTO = new QuestionDTO();
+        Question question = questionMapper.selectByPrimaryKey(id);
+        //copy object
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userMapper.selectByPrimaryKey(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
+
+    @Override
+    public void createOrUpdate(Question question) {
+        if(question.getId() == 0){
+            //Insert
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.insert(question);
+        }else{
+            //Update
+            question.setGmtModified(System.currentTimeMillis());
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
+            questionMapper.updateByExampleSelective(question,questionExample);
+        }
     }
 }

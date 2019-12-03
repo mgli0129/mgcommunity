@@ -50,7 +50,7 @@ public class ProfileController {
 
     }
 
-    @GetMapping("/profile/follow/{toptitle}")
+    @GetMapping("/profile/reply/{toptitle}")
     public String myFollow(@RequestParam(value = "pageNum", required = false, defaultValue="1") int pageNum,
                              @RequestParam(required = false, defaultValue="8") int pageSize,
                              @PathVariable("toptitle") String toptitle,
@@ -58,12 +58,11 @@ public class ProfileController {
                              Model model) {
 
         //Set top title
-        if(toptitle.equals("follow")){
-            model.addAttribute("toptitle", "【我的关注】---MG-COMMUNITY");
+        if(toptitle.equals("reply")){
+            model.addAttribute("toptitle", "【最新回复】---MG-COMMUNITY");
         }
 
-        return "/follow";
-
+        return "/reply";
     }
 
 }

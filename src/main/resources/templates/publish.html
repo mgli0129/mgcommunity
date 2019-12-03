@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${toptitle}"></title>
+    <title>【发布】--- MG-COMMUNITYMG</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
@@ -17,9 +17,10 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-            <h3><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>&nbsp;发起</h3>
+            <h3><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>&nbsp;提问</h3>
             <hr>
-            <form action="/dopublish" method="post">
+            <form action="/publish" method="post">
+                <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）:</label>
                     <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="问题标题...">
@@ -33,7 +34,7 @@
                     <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}" placeholder="创建或搜索添加新话题...">
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success btn-publish">确认发起</button>
+                    <button type="submit" class="btn btn-success btn-publish">发布</button>
                 </div>
                 <div class="alert alert-danger" style="margin-top:60px;" role="alert" th:if="${error != null}">
                     <p th:text="${error}"></p>

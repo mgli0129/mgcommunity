@@ -2,6 +2,7 @@ package com.mg.community.interceptor;
 
 import com.mg.community.mapper.UserMapper;
 import com.mg.community.model.User;
+import com.mg.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Service
 public class UserInterceptor implements HandlerInterceptor {
@@ -24,8 +26,12 @@ public class UserInterceptor implements HandlerInterceptor {
         if(cookies != null) {
             for (Cookie c : cookies) {
                 if (c.getName().equals("token")) {
-                    User user = userMapper.findUserByToken(c.getValue());
-                    request.getSession().setAttribute("user", user);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(c.getValue());
+                    List<User> userList = userMapper.selectByExample(userExample);
+                    if(userList.size() != 0){
+                        request.getSession().setAttribute("user", userList.get(0));
+                    }
                     break;
                 }
             }
