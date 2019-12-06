@@ -1,6 +1,7 @@
 package com.mg.community.service;
 
 import com.mg.community.dto.QuestionDTO;
+import com.mg.community.model.Comment;
 import com.mg.community.model.Question;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,15 @@ public interface QuestionService {
      */
     List<QuestionDTO> findAllDTO(List<Question> questions);
 
-    List<Question> findQuestionByCreator(int creator);
+    List<Question> findQuestionByCreator(Long creator);
 
-    QuestionDTO findQuestionById(int id);
+    QuestionDTO findDTOById(Long id);
+
+    Question findById(Long id);
 
     void createOrUpdate(Question question);
+
+    void incView(Question question);
+
+    void incComment(Question comment);
 }

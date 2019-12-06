@@ -1,6 +1,7 @@
 package com.mg.community.service.impl;
 
 import com.mg.community.dto.QuestionDTO;
+import com.mg.community.mapper.QuestionExtMapper;
 import com.mg.community.mapper.QuestionMapper;
 import com.mg.community.model.Question;
 import com.mg.community.model.QuestionExample;
@@ -22,6 +23,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Override
     public List<Question> findAll() {
@@ -49,14 +53,14 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> findQuestionByCreator(int creator) {
+    public List<Question> findQuestionByCreator(Long creator) {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(creator);
         return questionMapper.selectByExample(questionExample);
     }
 
     @Override
-    public QuestionDTO findQuestionById(int id) {
+    public QuestionDTO findDTOById(Long id) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = questionMapper.selectByPrimaryKey(id);
         //copy object
@@ -67,14 +71,19 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public Question findById(Long id) {
+        return questionMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public void createOrUpdate(Question question) {
         if(question.getId() == null){
             //Insert
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            question.setCommentCount(0);
-            question.setLikeCount(0);
-            question.setViewCount(0);
+            question.setCommentCount(0L);
+            question.setLikeCount(0L);
+            question.setViewCount(0L);
             questionMapper.insert(question);
         }else{
             //Update
@@ -83,5 +92,19 @@ public class QuestionServiceImpl implements QuestionService {
             questionExample.createCriteria().andIdEqualTo(question.getId());
             questionMapper.updateByExampleSelective(question,questionExample);
         }
+    }
+
+    @Override
+    public void incView(Question question) {
+        question.setId(question.getId());
+        question.setViewCount(1L);
+        questionExtMapper.incView(question);
+    }
+
+    @Override
+    public void incComment(Question question) {
+        question.setId(question.getId());
+        question.setCommentCount(1L);
+        questionExtMapper.incComment(question);
     }
 }

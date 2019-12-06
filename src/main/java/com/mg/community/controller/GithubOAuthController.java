@@ -61,7 +61,7 @@ public class GithubOAuthController {
         if (githubUser != null) {
             User userAcc = userService.findByAccountId(githubUser.getLogin());
             String token = null;
-            if(userAcc != null){
+            if(userAcc == null){
                 //登录成功，写入数据库
                 User user = new User();
                 user.setAccountId(githubUser.getLogin());

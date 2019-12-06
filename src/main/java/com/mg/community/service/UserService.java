@@ -23,10 +23,12 @@ public interface UserService {
      * @param id
      * @return
      */
-    public User findById(Integer id);
+    public User findById(Long id);
     /**
      * 新增或修改User
      * @param user
      */
     void createOrUpdate(User user);
+
+    User findByName(String username);
 }

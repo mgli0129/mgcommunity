@@ -10,8 +10,17 @@ body {
     background-color: white;
 }
 
+.login {
+    background-color: white;
+}
+
+.login_head{
+    text-align: center;
+}
+
 .btn-publish {
     margin-bottom: 15px;
+    width: 80px;
     float: right;
 }
 
@@ -29,4 +38,12 @@ body {
 
 .nav-right {
     float: right;
+}
+
+.media-body-avartar-name {
+    padding-top: 8px;
+}
+
+.form-group-margin {
+    margin: 10px 0;
 }

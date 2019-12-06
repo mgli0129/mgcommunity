@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/mgcommunity.css">
     <script src="/js/jquery-1.12.4.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/mgcommunity.js" type="application/javascript"></script>
 </head>
 <body>
 
@@ -17,40 +18,44 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-            <br>
-            <h4><span th:text="${question.title}"></span></h4>
-            <br>
-            <span class="viewfontformat">作者 <span th:text="${question.user.name}"></span> |</span>
-            <span class="viewfontformat">发布时间 <span
-                    th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span> |</span>
-            <span class="viewfontformat">阅读数： <span th:text="${question.viewCount}"></span></span>
-            <hr>
-            <span th:text="${question.content}"></span>
-            <hr>
-            <span class="label label-warning"><span th:text="${question.tag}"></span></span>
-            <hr>
-            <a th:href="@{'/publish/'+${question.id}}" th:if="${session.user.id == question.user.id}"><span class="glyphicon glyphicon-pencil"></span><span class="viewfontformat">编辑</span></a>
-            <br><br>
-            <h5><span th:text="${question.commentCount}"></span>个回复</h5>
-            <hr>
-            <br><br>
-            <div th:if="${session.user != null}">
-            <div class="media-left">
-                <a href="#"><img class="media-object img-rounded" th:src="${session.user.avatarUrl}"></a>
-            </div>
-            <div class="media-body">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <br>
-                <span th:text="${session.user.getName()}"></span>
+                <h4><span th:text="${question.title}"></span></h4>
+                <br>
+                <span class="viewfontformat">作者 <span th:text="${question.user.name}"></span> |</span>
+                <span class="viewfontformat">发布时间 <span
+                        th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span> |</span>
+                <span class="viewfontformat">阅读数： <span th:text="${question.viewCount}"></span></span>
+                <hr>
+                <span th:text="${question.content}"></span>
+                <hr>
+                <span class="label label-warning"><span th:text="${question.tag}"></span></span>
+                <hr>
+                <a th:href="@{'/publish/'+${question.id}}"
+                   th:if="${session.user != null && session.user.id == question.user.id}"><span
+                        class="glyphicon glyphicon-pencil"></span><span class="viewfontformat">编辑</span></a>
+                <br><br>
+                <h5><span th:text="${question.commentCount}"></span>个回复</h5>
+                <hr>
+                <br><br>
             </div>
-            <form action="/dopublish" method="post">
-                <div class="form-group">
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${session.user != null}" id="comment_area">
+                <div class="media-left">
+                    <a href="#" th:if="${session.user != null}"><img class="media-object img-rounded"
+                                                                     th:src="${session.user.avatarUrl}"></a>
+                </div>
+                <div class="media-body media-body-avartar-name">
+                    <span th:if="${session.user != null}" th:text="${session.user.getName()}"></span>
+                </div>
+                <div class="form-group form-group-margin">
+                    <input type="hidden" name="parentId" id="parentId" th:value="${question.id}">
                     <textarea name="content" id="content" class="form-control" rows="10"
                               th:text="${content}"></textarea>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success btn-publish">回复</button>
+                    <button type="button" class="btn btn-success btn-publish" onclick="postComment()">回复</button>
                 </div>
-            </form>
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -60,8 +65,7 @@
             <div class="media-left">
                 <a href="#"><img class="media-object img-circle" th:src="${question.user.avatarUrl}"></a>
             </div>
-            <div class="media-body">
-                <br>
+            <div class="media-body media-body-avartar-name">
                 <span th:text="${question.user.name}"></span>
             </div>
             <hr>

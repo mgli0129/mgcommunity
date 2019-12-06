@@ -25,9 +25,18 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/publish" th:if="${session.user != null}">提问</a></li>
                     <li th:if="not ${session.user != null}">
-                        <a href="https://github.com/login/oauth/authorize?client_id=1063111966ccae7aa3e8&
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            <span>登录</span>
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="https://github.com/login/oauth/authorize?client_id=1063111966ccae7aa3e8&
                     redirect_uri=http://localhost:8887/callback&scope=user
-                    &state=1">登录</a>
+                    &state=1">GitHub用户登录</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/login">本地用户登录</a></li>
+                        </ul>
+
                     </li>
                     <li class="dropdown" th:if="${session.user != null}">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -35,7 +44,7 @@
                             <span th:text="${session.user.getName()}"></span>
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/profile/question/question">我的问题</a></li>
+                            <li><a href="/question/publish">我的问题</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#">个人资料</a></li>
                             <li role="separator" class="divider"></li>

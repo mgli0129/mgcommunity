@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public User findById(Integer id) {
+    public User findById(Long id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
@@ -82,5 +82,16 @@ public class UserServiceImpl implements UserService {
             userExample.createCriteria().andIdEqualTo(user.getId());
             userMapper.updateByExampleSelective(user,userExample);
         }
+    }
+
+    @Override
+    public User findByName(String username) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andNameEqualTo(username);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if(userList.size() ==0){
+            return null;
+        }
+        return userList.get(0);
     }
 }
