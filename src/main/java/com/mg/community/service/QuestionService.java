@@ -33,4 +33,6 @@ public interface QuestionService {
     void incView(Question question);
 
     void incComment(Question comment);
+
+    List<QuestionDTO> findRelatedByTag(QuestionDTO questionDTO);
 }

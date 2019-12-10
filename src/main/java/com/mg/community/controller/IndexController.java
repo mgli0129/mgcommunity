@@ -21,7 +21,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(@RequestParam(value = "pageNum", required = false, defaultValue="1") int pageNum,
-                        @RequestParam(required = false, defaultValue="8") int pageSize,
+                        @RequestParam(required = false, defaultValue="15") int pageSize,
                         Model model) {
 
         //pagehelper分页处理

@@ -2,6 +2,8 @@ package com.mg.community.service;
 
 import com.mg.community.model.User;
 
+import java.util.List;
+
 public interface UserService {
 
     /**
@@ -31,4 +33,6 @@ public interface UserService {
     void createOrUpdate(User user);
 
     User findByName(String username);
+
+    List<User> listByIds(List<Long> userIds);
 }

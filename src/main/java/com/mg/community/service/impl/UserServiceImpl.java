@@ -94,4 +94,11 @@ public class UserServiceImpl implements UserService {
         }
         return userList.get(0);
     }
+
+    @Override
+    public List<User> listByIds(List<Long> userIds) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdIn(userIds);
+        return userMapper.selectByExample(userExample);
+    }
 }

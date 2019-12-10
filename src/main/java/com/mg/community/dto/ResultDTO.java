@@ -5,9 +5,18 @@ import com.mg.community.exception.CustomizeException;
 import lombok.Data;
 
 @Data
-public class ResultDTO {
+public class ResultDTO<T> {
     private String code;
     private String message;
+    private T data;
+
+    public static <T> ResultDTO okOf(T t){
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setCode(CustomizeErrorCode.SUCCESS.getCode());
+        resultDTO.setMessage(CustomizeErrorCode.SUCCESS.getMessage());
+        resultDTO.setData(t);
+        return resultDTO;
+    }
 
     public static ResultDTO errorOf(String code, String message){
         ResultDTO resultDTO = new ResultDTO();

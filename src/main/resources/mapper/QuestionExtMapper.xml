@@ -39,4 +39,9 @@
         COMMENT_COUNT = COMMENT_COUNT + #{commentCount,jdbcType=INTEGER}
         where ID = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectRelatedByTag" parameterType="com.mg.community.model.Question" resultMap="BaseResultMap">
+        select * from QUESTION
+        where tag REGEXP #{tag} and id != #{id}
+    </select>
 </mapper>
