@@ -24,6 +24,13 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/publish" th:if="${session.user != null}">提问</a></li>
+                    <li>
+                        <a href="/question/reply" th:if="${session.user != null}">
+                            <span class="glyphicon glyphicon-bell notify-bell-icon"></span>
+                            <span>通知</span>
+                            <span class="badge notify-badge" th:text="${session.countUnread}"></span>
+                        </a>
+                    </li>
                     <li th:if="not ${session.user != null}">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">

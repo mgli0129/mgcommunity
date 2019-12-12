@@ -1,6 +1,7 @@
 package com.mg.community.interceptor;
 
 import com.mg.community.model.User;
+import com.mg.community.service.NotificationService;
 import com.mg.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class UserInterceptor implements HandlerInterceptor {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -26,7 +30,10 @@ public class UserInterceptor implements HandlerInterceptor {
                 if (c.getName().equals("token")) {
                     User user = userService.findByToken(c.getValue());
                     if(user != null){
+                        //获取未读数通知
+                        int countUnread = notificationService.countUnread(user.getId());
                         request.getSession().setAttribute("user", user);
+                        request.getSession().setAttribute("countUnread", countUnread);
                     }
                     break;
                 }

@@ -27,6 +27,12 @@ public class CommentController {
     @Autowired
     private QuestionService questionService;
 
+    /**
+     * 回复问题或者评论
+     * @param commentInputDTO
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public Object post(@RequestBody CommentInputDTO commentInputDTO,
@@ -43,7 +49,7 @@ public class CommentController {
         comment.setContent(commentInputDTO.getContent());
         comment.setType(commentInputDTO.getType());
         comment.setCommentator(user.getId());
-        commentService.createOrUpdate(comment);
+        commentService.createOrUpdate(comment, user);
         return ResultDTO.okOf();
     }
 

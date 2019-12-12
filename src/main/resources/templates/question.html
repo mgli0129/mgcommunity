@@ -21,14 +21,12 @@
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 main-left">
                 <br>
                 <h4>我的问题</h4>
-                <hr>
-                <div class="media" th:each="question:${questions}">
+                <hr class="index-hr-top">
+                <div class="media index-content" th:each="question:${questions}">
                     <div class="media-body">
                         <a th:href="@{/question/{id}(id=${question.id})}">
                             <h4 class="media-heading" th:text="${question.title}"></h4>
                         </a>
-                        <span th:text="${question.content}"></span>
-                        <br>
                         <span class="label label-info index-font-size" th:each="tag:${question.tag.split(',')}">
                                 <span class="glyphicon glyphicon-tags"> </span>
                             <span th:text="${tag}"></span></span>
@@ -42,7 +40,6 @@
                                 class="glyphicon glyphicon-pencil"></span><span
                                 class="viewfontformat">编辑</span></a>
                     </div>
-                    <hr>
                 </div>
                 <nav class="nav-right" aria-label="Page navigation">
                     <ul class="pagination pagination-lg">
@@ -80,9 +77,9 @@
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                 <br>
                 <div class="list-group">
-                    <a href="/question/publish" class="list-group-item active">我的提问</a>
+                    <a href="/question/publish" class="list-group-item active" >我的提问</a>
                     <a href="/question/reply" class="list-group-item">最新回复
-                        <span class="badge">4</span>
+                        <span class="badge" th:text="${session.countUnread}"></span>
                     </a>
                     <a href="#" class="list-group-item">我的关注</a>
                 </div>

@@ -60,6 +60,7 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> findQuestionByCreator(Long creator) {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(creator);
+        questionExample.setOrderByClause("gmt_create desc");
         return questionMapper.selectByExample(questionExample);
     }
 

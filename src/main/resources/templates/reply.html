@@ -14,23 +14,65 @@
 <!--navigation including-->
 <div th:insert="~{navigation :: nav}"></div>
 
-<div class="container-fluid main">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-            <br>
-            <h4>最新回复</h4>
-            <hr>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-            <br>
-            <div class="list-group">
-                <a href="/question/publish" class="list-group-item active">我的提问</a>
-                <a href="/question/reply" class="list-group-item">最新回复
-                    <span class="badge">4</span></a>
-                <a href="#" class="list-group-item">我的关注</a>
+        <div class="col-lg-1 col-md-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 main">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 main-left">
+                <br>
+                <h4>最新回复</h4>
+                <hr class="index-hr-top">
+                <div class="media index-content" th:each="notification:${notifications}">
+                        <span th:text="${notification.notifierName}"> </span>
+                        <span th:text="${notification.notificationTypeName}"> </span>
+                    <a th:href="@{'/notify/' + ${notification.id}}"
+                    <span th:text="${notification.notifyTitle}"></span></a>
+                    <span class="label label-danger index-font-size" th:text="${notification.notificationStatusName}"></span>
+                </div>
+                <nav class="nav-right" aria-label="Page navigation">
+                    <ul class="pagination pagination-lg">
+                        <li th:if="${pageInfo.pageNum} &gt; 5" aria-label="Previous">
+                            <a th:href="@{/question/publish/(pageNum=1)}" + aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pageInfo.hasPreviousPage}">
+                            <a th:href="@{/question/publish/(pageNum=${pageInfo.getPrePage()})}">
+                                <span aria-hidden="true">&lsaquo;</span>
+                            </a>
+                        </li>
+                        <li th:each="pageNum:${pageInfo.navigatepageNums}"
+                            th:class="${pageInfo.pageNum == pageNum}? 'active' : ''">
+                            <a th:href="@{/question/publish/(pageNum=
+			${pageNum})}" th:text="${pageNum}">
+                            </a>
+                        </li>
+                        <li th:if="${pageInfo.hasNextPage}">
+                            <a th:href="@{/question/publish/(pageNum=
+			${pageInfo.getNextPage()})}">
+                                <span aria-hidden="true">&rsaquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pageInfo.pageNum < pageInfo.pages}" aria-label="Next">
+                            <a th:href="@{/question/publish/(pageNum=
+			${pageInfo.total})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <br>
+                <div class="list-group">
+                    <a href="/question/publish" class="list-group-item">我的提问</a>
+                    <a href="/question/reply" class="list-group-item active">最新回复
+                        <span class="badge" th:text="${session.countUnread}"></span></a>
+                    <a href="#" class="list-group-item">我的关注</a>
+                </div>
             </div>
         </div>
-
+        <div class="col-lg-1 col-md-1"></div>
     </div>
 </div>
 

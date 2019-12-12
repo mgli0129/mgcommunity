@@ -131,6 +131,15 @@ function collapseComments(e) {
         e.removeAttribute("data-collapse");
         e.classList.remove("active");
     } else {//展开评论
+
+        //如果没有提交二级评论再点击折叠，不再重复获取数据；
+        if(comments.children("div").length >1){
+            comments.addClass("in");
+            e.setAttribute("data-collapse", "in");
+            e.classList.add("active");
+            return;
+        }
+
         //获取数据
         $.ajax({
             type:

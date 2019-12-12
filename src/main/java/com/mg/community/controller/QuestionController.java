@@ -3,11 +3,14 @@ package com.mg.community.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mg.community.dto.CommentDTO;
+import com.mg.community.dto.NotificationDTO;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.enums.CommentTypeEnum;
+import com.mg.community.model.Notification;
 import com.mg.community.model.Question;
 import com.mg.community.model.User;
 import com.mg.community.service.CommentService;
+import com.mg.community.service.NotificationService;
 import com.mg.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,12 +33,18 @@ public class QuestionController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @GetMapping("/question/{id}")
     public String question(@PathVariable("id") Long id,
                            Model model) {
 
         //点击一次Question将增加一个View
         questionService.incView(questionService.findById(id));
+
+
+
         QuestionDTO questionDTO = questionService.findDTOById(id);
         List<CommentDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTION.getType());
 
@@ -77,6 +86,15 @@ public class QuestionController {
                            @RequestParam(required = false, defaultValue="8") int pageSize,
                            HttpServletRequest request,
                            Model model) {
+
+        User user = (User) request.getSession().getAttribute("user");
+        //pagehelper分页处理
+        PageHelper.startPage(pageNum, pageSize);
+        List<NotificationDTO> notifications = notificationService.findNotificationByReceiver(user.getId());
+        PageInfo<NotificationDTO> pageInfo = new PageInfo<NotificationDTO>(notifications);
+
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("pageInfo", pageInfo);
         return "/reply";
     }
 

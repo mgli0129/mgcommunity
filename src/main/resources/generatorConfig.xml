@@ -25,5 +25,6 @@
         <table tableName="user"/>
         <table tableName="question" />
         <table tableName="comment" />
+        <table tableName="notification" />
     </context>
 </generatorConfiguration>

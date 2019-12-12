@@ -2,15 +2,14 @@ package com.mg.community.service.impl;
 
 import com.mg.community.dto.CommentDTO;
 import com.mg.community.enums.CommentTypeEnum;
+import com.mg.community.enums.NotificationTypeEnum;
 import com.mg.community.exception.CustomizeErrorCode;
 import com.mg.community.exception.CustomizeException;
 import com.mg.community.mapper.CommentExtMapper;
 import com.mg.community.mapper.CommentMapper;
-import com.mg.community.model.Comment;
-import com.mg.community.model.CommentExample;
-import com.mg.community.model.Question;
-import com.mg.community.model.User;
+import com.mg.community.model.*;
 import com.mg.community.service.CommentService;
+import com.mg.community.service.NotificationService;
 import com.mg.community.service.QuestionService;
 import com.mg.community.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -40,9 +39,12 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
-    public void createOrUpdate(Comment comment) {
-        Comment comm = null;
+    public void createOrUpdate(Comment comment, User commentator) {
+        Comment parentComment = null;
         Question question = null;
 
         //校验
@@ -56,8 +58,8 @@ public class CommentServiceImpl implements CommentService {
 
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             //回复comment
-            comm = commentMapper.selectByPrimaryKey(comment.getParentId());
-            if (comm == null) {
+            parentComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            if (parentComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
         } else {
@@ -81,12 +83,19 @@ public class CommentServiceImpl implements CommentService {
             if (comment.getType() == CommentTypeEnum.QUESTION.getType()) {
                 question.setCommentCount(1L);
                 questionService.incComment(question);
+
+                //通知提问题的人
+                createNotify(question.getCreator(),comment, NotificationTypeEnum.REPLY_QUESTION, commentator.getName(),question.getTitle(),question.getId());
             }else{
                 //给评论的评论增加1
-                Comment parentComment = new Comment();
-                parentComment.setId(comment.getParentId());
                 parentComment.setCommentCount(1L);
                 commentExtMapper.incComment(parentComment);
+
+                //获取一级回复的父类id问题
+                question = questionService.findById(parentComment.getParentId());
+
+                //通知提原回复的人
+                createNotify(parentComment.getCommentator(),comment, NotificationTypeEnum.REPLY_COMMENT, commentator.getName(),question.getTitle(),question.getId());
             }
 
         } else {
@@ -96,6 +105,18 @@ public class CommentServiceImpl implements CommentService {
             commentExample.createCriteria().andIdEqualTo(comment.getId());
             commentMapper.updateByExampleSelective(comment, commentExample);
         }
+    }
+
+    private void createNotify(Long receiver, Comment comment, NotificationTypeEnum type, String commentator, String commentTitle, Long questionId) {
+        Notification notification = new Notification();
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setType(type.getType());
+        notification.setOuterid(comment.getParentId());
+        notification.setNotifierName(commentator);
+        notification.setNotifyTitle(commentTitle);
+        notification.setQuestionid(questionId);
+        notificationService.create(notification);
     }
 
     @Override
