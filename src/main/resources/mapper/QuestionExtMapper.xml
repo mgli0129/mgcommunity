@@ -44,4 +44,27 @@
         select * from QUESTION
         where tag REGEXP #{tag} and id != #{id}
     </select>
+
+    <select id="selectByOrTitle" parameterType="com.mg.community.model.Question" resultMap="BaseResultMap">
+        select * from QUESTION
+        <where>
+            <if test="title != null">
+                TITLE REGEXP #{title}
+            </if>
+        </where>
+        order by GMT_CREATE DESC
+    </select>
+
+    <select id="selectByCreatorOrSearch" parameterType="com.mg.community.model.Question" resultMap="BaseResultMap">
+        select * from QUESTION
+        <where>
+            <if test="title != null">
+                TITLE REGEXP #{title}
+            </if>
+            <if test="creator != null">
+                AND CREATOR = #{creator}
+            </if>
+        </where>
+        order by GMT_CREATE DESC
+    </select>
 </mapper>

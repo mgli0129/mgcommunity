@@ -31,11 +31,12 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     @Override
-    public List<Question> findAll() {
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria();
-        questionExample.setOrderByClause("gmt_create desc");
-        return questionMapper.selectByExample(questionExample);
+    public List<Question> findAllBySearch(String search) {
+        Question question = new Question();
+        if(!StringUtils.isBlank(search)){
+            question.setTitle(search);
+        }
+        return questionExtMapper.selectByOrTitle(question);
     }
 
     @Override
@@ -57,11 +58,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> findQuestionByCreator(Long creator) {
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria().andCreatorEqualTo(creator);
-        questionExample.setOrderByClause("gmt_create desc");
-        return questionMapper.selectByExample(questionExample);
+    public List<Question> findQuestionByCreatorOrSearch(Long creator, String search) {
+        Question question = new Question();
+        question.setCreator(creator);
+        question.setTitle(search);
+        return questionExtMapper.selectByCreatorOrSearch(question);
     }
 
     @Override

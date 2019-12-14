@@ -16,4 +16,6 @@ public interface QuestionExtMapper {
     int incComment(Question question);
 
     List<Question> selectRelatedByTag(Question question);
+    List<Question> selectByOrTitle(Question question);
+    List<Question> selectByCreatorOrSearch(Question question);
 }

@@ -13,7 +13,7 @@ public interface QuestionService {
      * 供pagehelper使用
      * @return
      */
-    List<Question> findAll();
+    List<Question> findAllBySearch(String search);
 
     /**
      * 补全当前页的question结果集
@@ -22,7 +22,7 @@ public interface QuestionService {
      */
     List<QuestionDTO> findAllDTO(List<Question> questions);
 
-    List<Question> findQuestionByCreator(Long creator);
+    List<Question> findQuestionByCreatorOrSearch(Long creator, String search);
 
     QuestionDTO findDTOById(Long id);
 

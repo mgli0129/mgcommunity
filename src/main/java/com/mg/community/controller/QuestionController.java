@@ -6,12 +6,12 @@ import com.mg.community.dto.CommentDTO;
 import com.mg.community.dto.NotificationDTO;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.enums.CommentTypeEnum;
-import com.mg.community.model.Notification;
 import com.mg.community.model.Question;
 import com.mg.community.model.User;
 import com.mg.community.service.CommentService;
 import com.mg.community.service.NotificationService;
 import com.mg.community.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Controller
 public class QuestionController {
@@ -66,17 +67,25 @@ public class QuestionController {
     @GetMapping("/question/publish")
     public String myQuestion(@RequestParam(value = "pageNum", required = false, defaultValue="1") int pageNum,
                              @RequestParam(required = false, defaultValue="8") int pageSize,
+                             @RequestParam(value = "search",required = false) String search,
                              HttpServletRequest request,
                              Model model) {
+
+        String searchStr=null;
+        if(!StringUtils.isBlank(search)){
+            String[] splits = search.split(" ");
+            searchStr = Arrays.stream(splits).collect(Collectors.joining("|"));
+        }
 
         User user = (User) request.getSession().getAttribute("user");
         //pagehelper分页处理
         PageHelper.startPage(pageNum, pageSize);
-        List<Question> questions = questionService.findQuestionByCreator(user.getId());
+        List<Question> questions = questionService.findQuestionByCreatorOrSearch(user.getId(),searchStr);
         PageInfo<Question> pageInfo = new PageInfo<Question>(questions);
 
         model.addAttribute("questions", questions);
         model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("search", search);
 
         return "/question";
     }

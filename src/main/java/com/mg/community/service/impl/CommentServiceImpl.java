@@ -85,8 +85,8 @@ public class CommentServiceImpl implements CommentService {
                 questionService.incComment(question);
 
                 //通知提问题的人
-                createNotify(question.getCreator(),comment, NotificationTypeEnum.REPLY_QUESTION, commentator.getName(),question.getTitle(),question.getId());
-            }else{
+                createNotify(question.getCreator(), comment, NotificationTypeEnum.REPLY_QUESTION, commentator.getName(), question.getTitle(), question.getId());
+            } else {
                 //给评论的评论增加1
                 parentComment.setCommentCount(1L);
                 commentExtMapper.incComment(parentComment);
@@ -95,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
                 question = questionService.findById(parentComment.getParentId());
 
                 //通知提原回复的人
-                createNotify(parentComment.getCommentator(),comment, NotificationTypeEnum.REPLY_COMMENT, commentator.getName(),question.getTitle(),question.getId());
+                createNotify(parentComment.getCommentator(), comment, NotificationTypeEnum.REPLY_COMMENT, commentator.getName(), question.getTitle(), question.getId());
             }
 
         } else {
@@ -108,6 +108,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void createNotify(Long receiver, Comment comment, NotificationTypeEnum type, String commentator, String commentTitle, Long questionId) {
+        //自己回复自己的，不添加通知
+        if (receiver.equals(comment.getCommentator())) {
+            return;
+        }
+
         Notification notification = new Notification();
         notification.setNotifier(comment.getCommentator());
         notification.setReceiver(receiver);

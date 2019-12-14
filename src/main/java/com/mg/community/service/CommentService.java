@@ -9,6 +9,5 @@ import java.util.function.Supplier;
 
 public interface CommentService {
     void createOrUpdate(Comment comment, User commentator);
-
     List<CommentDTO> listByTargetId(Long id, Integer type);
 }
