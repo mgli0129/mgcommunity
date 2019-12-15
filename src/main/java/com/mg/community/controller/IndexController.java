@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.model.Question;
 import com.mg.community.service.QuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@Slf4j
 public class IndexController {
 
     @Autowired
@@ -43,6 +45,7 @@ public class IndexController {
         model.addAttribute("questions", questionDTOs);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("search", search);
+
         return "index";
     }
 

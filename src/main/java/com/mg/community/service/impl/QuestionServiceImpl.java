@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 @Service("questionService")
 public class QuestionServiceImpl implements QuestionService {
 
-    @Autowired
+    @Autowired(required = false)
     private UserService userService;
 
-    @Autowired
+    @Autowired(required = false)
     private QuestionMapper questionMapper;
 
-    @Autowired
+    @Autowired(required = false)
     private QuestionExtMapper questionExtMapper;
 
     @Override
@@ -68,7 +68,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDTO findDTOById(Long id) {
         QuestionDTO questionDTO = new QuestionDTO();
-        Question question = questionMapper.selectByPrimaryKey(id);
+        Question question = findById(id);
         //copy object
         BeanUtils.copyProperties(question, questionDTO);
         User user = userService.findById(question.getCreator());
@@ -78,7 +78,14 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question findById(Long id) {
-        return questionMapper.selectByPrimaryKey(id);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andIdEqualTo(id);
+        List<Question> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
+        if(questions == null){
+            return null;
+        }
+        Question question = questions.get(0);
+        return question;
     }
 
     @Override

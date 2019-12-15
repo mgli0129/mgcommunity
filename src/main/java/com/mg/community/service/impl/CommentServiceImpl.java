@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 @Service("CommentService")
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
+    @Autowired(required = false)
     private CommentMapper commentMapper;
 
-    @Autowired
+    @Autowired(required = false)
     private CommentExtMapper commentExtMapper;
 
     @Autowired
@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             //回复comment
-            parentComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            parentComment = findById(comment.getParentId());
             if (parentComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
@@ -105,6 +105,16 @@ public class CommentServiceImpl implements CommentService {
             commentExample.createCriteria().andIdEqualTo(comment.getId());
             commentMapper.updateByExampleSelective(comment, commentExample);
         }
+    }
+
+    private Comment findById(Long id) {
+        CommentExample commentExample = new CommentExample();
+        commentExample.createCriteria().andIdEqualTo(id);
+        List<Comment> comments = commentMapper.selectByExample(commentExample);
+        if(comments == null){
+            return null;
+        }
+        return comments.get(0);
     }
 
     private void createNotify(Long receiver, Comment comment, NotificationTypeEnum type, String commentator, String commentTitle, Long questionId) {

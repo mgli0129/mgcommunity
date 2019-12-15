@@ -1,7 +1,6 @@
 package com.mg.community.service.impl;
 
 import com.mg.community.mapper.UserMapper;
-import com.mg.community.model.QuestionExample;
 import com.mg.community.model.User;
 import com.mg.community.model.UserExample;
 import com.mg.community.service.UserService;
@@ -13,7 +12,7 @@ import java.util.List;
 @Controller("UserService")
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Autowired(required = false)
     private UserMapper userMapper;
 
     /**
@@ -59,7 +58,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User findById(Long id) {
-        return userMapper.selectByPrimaryKey(id);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdEqualTo(id);
+        List<User> users = userMapper.selectByExample(userExample);
+        if(users.size()>0){
+            return users.get(0);
+        }
+        return null;
     }
 
     /**

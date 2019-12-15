@@ -3,10 +3,12 @@ package com.mg.community.Provider;
 import com.alibaba.fastjson.JSON;
 import com.mg.community.dto.AccessTokenDTO;
 import com.mg.community.dto.GithubUser;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class GithubProvider {
 
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {
@@ -24,6 +26,7 @@ public class GithubProvider {
             System.out.println(str);
             return str;
         } catch (Exception e) {
+            log.debug("get github token fail. { "+accessTokenDTO +" }");
             System.out.println(e.toString());
         }
         return null;

@@ -1,2 +1,0 @@
-alter table NOTIFICATION
-	add QUESTIONID BIGINT;
