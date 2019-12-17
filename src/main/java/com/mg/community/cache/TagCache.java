@@ -14,12 +14,12 @@ public class TagCache {
         List<TagDTO> tagDTOs = new ArrayList<>();
         TagDTO front = new TagDTO();
         front.setCategoryName("前端");
-        front.setTags(Arrays.asList("javascript","前端","vue.js","css","html","html5","node.js","react.js","jquery","css3","es6","typescript","chrome","npm","bootstrap","sass","less","chrome-devtools","firefox","angular","coffeescript","safari","postcss","postman","fiddler","webkit","yarn","firebug","edge"));
+        front.setTags(Arrays.asList("javascript","vue.js","css","html","html5","node.js","react.js","jquery","css3","es6","typescript","chrome","npm","bootstrap","Sass","Less","chrome-devtools","firefox","angular","coffeescript","safari","postcss","postman","fiddler","webkit","yarn","firebug","edge"));
         tagDTOs.add(front);
 
         TagDTO back = new TagDTO();
         back.setCategoryName("后端");
-        back.setTags(Arrays.asList("php","java","node.js","python","c++","c","golang","spring","django","flask","springboot","后端","c#","swoole","ruby","as",".net","ruby-on-rails","scala","rust","lavarel","爬虫"));
+        back.setTags(Arrays.asList("php","java","python","c++","c","golang","spring","django","flask","springboot","c#","swoole","ruby","as",".net","ruby-on-rails","scala","rust","lavarel","爬虫"));
         tagDTOs.add(back);
 
         TagDTO mobile = new TagDTO();
@@ -29,7 +29,7 @@ public class TagCache {
 
         TagDTO db = new TagDTO();
         db.setCategoryName("数据库");
-        db.setTags(Arrays.asList("mysql","redis","mongodb","sql","数据库","json","elasticsearch","nosql","memcached","postgresql","sqlite","mariadb"));
+        db.setTags(Arrays.asList("mysql","redis","mongodb","sql","json","elasticsearch","nosql","memcached","postgresql","sqlite","mariadb"));
         tagDTOs.add(db);
 
         TagDTO other = new TagDTO();

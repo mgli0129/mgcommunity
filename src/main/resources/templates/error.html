@@ -3,10 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/mgcommunity.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
-<h1>出错啦！！！</h1>
-<span th:text="${message}"></span>
-<h3><a href="/">返回首页</a></h3>
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-lg-1 col-md-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            <div class="jumbotron error-color">
+                <h1>出错啦！！！</h1>
+                <br>
+                <p th:text="${message}">...</p>
+                <br>
+                <p><a class="btn btn-success btn-lg" href="/" role="button"> 返回首页 </a></p>
+            </div>
+        </div>
+        <div class="col-lg-1 col-md-1"></div>
+    </div>
+</div>
+
 </body>
 </html>

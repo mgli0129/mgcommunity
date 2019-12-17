@@ -3,6 +3,7 @@
 <head>
     <title th:text="${toptitle}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/mgcommunity.css">
@@ -57,7 +58,7 @@
                         </span>
                             <a th:href="@{'/publish/'+${question.id}}"
                                th:if="${session.user != null && session.user.id == question.user.id}"><span
-                                    class="glyphicon glyphicon-pencil"></span><span
+                                    class="glyphicon glyphicon-edit"></span><span
                                     class="viewfontformat">编辑</span></a>
                         </div>
 

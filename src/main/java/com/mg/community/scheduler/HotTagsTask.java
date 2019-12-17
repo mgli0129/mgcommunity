@@ -1,6 +1,7 @@
 package com.mg.community.scheduler;
 
 import com.github.pagehelper.PageHelper;
+import com.mg.community.cache.PriorityCache;
 import com.mg.community.model.Question;
 import com.mg.community.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @ClassName HotTagsTask
@@ -26,16 +26,26 @@ public class HotTagsTask {
     @Autowired
     private QuestionService questionService;
 
-    @Scheduled(fixedRate = 5000)
+    @Autowired
+    private PriorityCache priorityCache;
+
+    /**
+     * 热门话题的权值计算公式：
+     *    权值 = 5 + 标签 + 问题回复数
+     * @每8小时刷新一次
+     */
+    @Scheduled(fixedRate = 1000*60*60*8)
     public void getHotTopics() {
 
         int offSet = 0;
         int limit = 5;
         List<Question> questions = new ArrayList<>();
         Map<String, Long> priorities = new HashMap<>();
+        List<String> outPut = new ArrayList<>();
 
-        log.info("Get hot tags starting time: {}", new Date());
+        log.info("getHotTopics start: {}", new Date());
 
+        //得到标签和权值的无序的Map
         while(offSet == 0 || questions.size() == 5){
             PageHelper.startPage(offSet, limit);
             questions = questionService.findAllBySearch(null);
@@ -52,11 +62,11 @@ public class HotTagsTask {
             }
             offSet ++;
         }
-        for (String s : priorities.keySet()) {
-            Long value = (Long) priorities.get(s);
-            System.out.println(s + ": " + value);
-        }
-        log.info("Get hot tags end time: {}", new Date());
+
+        //选出前X位排名
+        priorityCache.sortPriorites(priorities);
+
+        log.info("getHotTopics stop: {}", new Date());
     }
 
 }

@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MG Community</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/mgcommunity.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+
+<div class="container-fluid ">
+    <div class="row"><br><br><br><br></div>
+    <div class="row">
+        <div class="col-lg-4 col-md-2 col-sm-1"></div>
+        <div class="col-lg-4 col-md-8 col-sm-10 col-xs-12 login">
+            <form action="/login" method="post">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <br>
+                    <h3><p class="lead login_head">用户登录</p></h3>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">用户名</span>
+                        <input type="text" class="form-control" name="username" th:value="${username}"
+                               placeholder="请输入用户名" aria-describedby="basic-addon1">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">密&nbsp;&nbsp;&nbsp;码</span>
+                        <input type="password" class="form-control" name="password" placeholder="请输入密码"
+                               aria-describedby="basic-addon1">
+                    </div>
+                    <br>
+                    <br>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-4"></div>
+                    <button type="submit" class="btn btn-success col-lg-4 col-md-12 col-sm-12 col-xs-12">登录</button>
+                    <div class="col-lg-4"></div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <br><br>
+                    <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error != null}">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <strong>错误!</strong>&nbsp;&nbsp; <span th:text="${error}"></span>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-lg-4 col-md-2 col-sm-1"></div>
+    </div>
+    <div class="row"></div>
+</div>
+
+</body>
+</html>

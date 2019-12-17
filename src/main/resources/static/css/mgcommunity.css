@@ -5,6 +5,7 @@ body {
 
 .main {
     margin: 30px 10px;
+    padding-right: 0px;
     /*margin-left: 120px;*/
     /*margin-right: 120px;*/
     background-color: white;
@@ -14,6 +15,22 @@ body {
     border-right: 1px solid #eee;
     padding-left: 15px;
     padding-right: 0;
+}
+
+.main-right {
+    padding-left: 0;
+    padding-right: 0;
+    border-left: 1px solid #eee;
+}
+
+.index-img-wechat{
+    padding: 7px;
+}
+.index-img-wechat-text{
+    margin: 0;
+    padding: 0;
+    font-size: large;
+    text-align: center;
 }
 
 .page-blank {
@@ -259,4 +276,19 @@ body {
     text-align: center;
     color: #666;
     margin-bottom: 10px;
+}
+
+.tag-font-size{
+    font-size: 14px;
+}
+
+.nav-left-right-blank{
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.error-color{
+background-color: #d9534f;
 }

@@ -5,8 +5,9 @@
 <body>
 
 <div th:fragment="nav">
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default center-block">
         <div class="container-fluid">
+            <row>
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -23,10 +24,10 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right ">
                     <li><a href="/publish" th:if="${session.user != null}">提问</a></li>
-                    <li>
+                    <li role="presentation">
                         <a href="/question/reply" th:if="${session.user != null}">
                             <span class="glyphicon glyphicon-bell notify-bell-icon"></span>
-                            <span>通知</span>
+                            <span>通知 </span>
                             <span class="badge notify-badge" th:text="${session.countUnread}"
                                   th:class="${session.countUnread} == 0 ? 'badge':'badge notify-badge'"></span>
                         </a>
@@ -60,6 +61,7 @@
                     </li>
                 </ul>
             </div>
+            </row>
         </div>
     </nav>
 </div>

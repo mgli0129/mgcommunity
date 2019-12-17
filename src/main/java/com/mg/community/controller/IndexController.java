@@ -2,6 +2,7 @@ package com.mg.community.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mg.community.cache.PriorityCache;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.model.Question;
 import com.mg.community.service.QuestionService;
@@ -24,6 +25,9 @@ public class IndexController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private PriorityCache priorityCache;
+
     @GetMapping("/")
     public String index(@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
                         @RequestParam(required = false, defaultValue = "15") int pageSize,
@@ -42,9 +46,13 @@ public class IndexController {
         //Add users into Questions
         List<QuestionDTO> questionDTOs = questionService.findAllDTO(questions);
 
+        //获取热门话题
+        List<String> hotTopics = priorityCache.getHots();
+
         model.addAttribute("questions", questionDTOs);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("search", search);
+        model.addAttribute("hotTopics", hotTopics);
 
         return "index";
     }
