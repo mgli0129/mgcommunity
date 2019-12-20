@@ -1,5 +1,6 @@
 package com.mg.community.service.impl;
 
+import com.mg.community.dto.HotTopicDataDTO;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.mapper.QuestionExtMapper;
 import com.mg.community.mapper.QuestionMapper;
@@ -33,10 +34,20 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<Question> findAllBySearch(String search) {
         Question question = new Question();
-        if(!StringUtils.isBlank(search)){
+        if (!StringUtils.isBlank(search)) {
             question.setTitle(search);
         }
         return questionExtMapper.selectByOrTitle(question);
+    }
+
+    @Override
+    public List<Question> findAllByTagOrderByComment(Question question) {
+        return questionExtMapper.selectByTagWithSearchOByComment(question);
+    }
+
+    @Override
+    public List<Question> findAllByTagOrderByView(Question question) {
+        return questionExtMapper.selectByTagWithSearchOByView(question);
     }
 
     @Override
@@ -81,7 +92,7 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andIdEqualTo(id);
         List<Question> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
-        if(questions == null){
+        if (questions == null) {
             return null;
         }
         Question question = questions.get(0);
@@ -90,7 +101,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createOrUpdate(Question question) {
-        if(question.getId() == null){
+        if (question.getId() == null) {
             //Insert
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
@@ -98,12 +109,12 @@ public class QuestionServiceImpl implements QuestionService {
             question.setLikeCount(0L);
             question.setViewCount(0L);
             questionMapper.insert(question);
-        }else{
+        } else {
             //Update
             question.setGmtModified(System.currentTimeMillis());
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(question,questionExample);
+            questionMapper.updateByExampleSelective(question, questionExample);
         }
     }
 
@@ -123,10 +134,10 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDTO> findRelatedByTag(QuestionDTO qdto) {
-        if(StringUtils.isBlank(qdto.getTag())){
+        if (StringUtils.isBlank(qdto.getTag())) {
             return new ArrayList<>();
         }
-        String[] tags = StringUtils.split(qdto.getTag(),",");
+        String[] tags = StringUtils.split(qdto.getTag(), ",");
         String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
         Question question = new Question();
         question.setId(qdto.getId());
@@ -134,9 +145,32 @@ public class QuestionServiceImpl implements QuestionService {
         List<Question> questions = questionExtMapper.selectRelatedByTag(question);
         List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(q,questionDTO);
+            BeanUtils.copyProperties(q, questionDTO);
             return questionDTO;
         }).collect(Collectors.toList());
         return questionDTOS;
+    }
+
+    @Override
+    public HotTopicDataDTO getHotTopicDatas(Question question) {
+
+        Long questionCount = 0l;
+        Long commentCount = 0l;
+        Long viewCount = 0l;
+
+        HotTopicDataDTO hotTopicDataDTO = new HotTopicDataDTO();
+        List<Question> questions = findAllByTagOrderByComment(question);
+
+        for (Question q : questions) {
+            questionCount++;
+            commentCount += q.getCommentCount();
+            viewCount += q.getViewCount();
+        }
+
+        hotTopicDataDTO.setQuestionCount(questionCount);
+        hotTopicDataDTO.setCommentCount(commentCount);
+        hotTopicDataDTO.setViewCount(viewCount);
+
+        return hotTopicDataDTO;
     }
 }

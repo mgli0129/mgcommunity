@@ -6,6 +6,7 @@ import com.mg.community.enums.NotificationTypeEnum;
 import com.mg.community.mapper.NotificationMapper;
 import com.mg.community.model.Notification;
 import com.mg.community.model.NotificationExample;
+import com.mg.community.model.User;
 import com.mg.community.service.NotificationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,13 +62,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void readNotify(Long receiver) {
-        if (receiver != null) {
+    public void readNotify(Long id) {
+        if (id != null) {
             Notification notification = new Notification();
-            notification.setId(receiver);
+            notification.setId(id);
             notification.setStatus(NotificationStatusEnum.READ.getStatus());
             NotificationExample notificationExample = new NotificationExample();
-            notificationExample.createCriteria().andIdEqualTo(receiver);
+            notificationExample.createCriteria().andIdEqualTo(id);
             notificationMapper.updateByExampleSelective(notification, notificationExample);
         }
     }
@@ -81,6 +82,18 @@ public class NotificationServiceImpl implements NotificationService {
             return null;
         }
         return notifications.get(0);
+    }
+
+    @Override
+    public void clearByReceiver(User user) {
+        Long receiver = user.getId();
+        if (receiver != null) {
+            Notification notification = new Notification();
+            notification.setStatus(NotificationStatusEnum.READ.getStatus());
+            NotificationExample notificationExample = new NotificationExample();
+            notificationExample.createCriteria().andReceiverEqualTo(receiver);
+            notificationMapper.updateByExampleSelective(notification, notificationExample);
+        }
     }
 }
 

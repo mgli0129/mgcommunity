@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>热门话题</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/mgcommunity.css">
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/mgcommunity.js"></script>
+</head>
+<body>
+<!--navigation including-->
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1 col-md-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 main">
+            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 main-left">
+                <h3><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;<span
+                        th:text="${topic}"></span></h3>
+                <hr class="index-hr-top">
+
+                <div id="selectTags" class="publish-selectTags" style="display: block;">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" th:each="_tab:${tabs}" th:class="${_tab.index == id}? active">
+                            <a class="hottopic-tab" aria-controls="home" role="tab"
+                               data-toggle="tab" th:text="${_tab.name}"
+                               th:data-topic="${topic}" th:data-id="${_tab.index}"
+                               th:onclick="getHotTab(this);"></a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade in publish-taglib-tag"
+                             th:id="${_tab}" th:each="_tab:${tabs}" th:classappend="${_tab.index == id}? active">
+                            <div class="media index-content" th:each="question:${questions}">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <a th:href="@{'/question/'+${question.id}}">
+                                        <h4 class="media-heading index-content-head" th:text="${question.title}"></h4>
+                                    </a>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 question-tag">
+                                        <span class="label label-info index-font-size"
+                                              th:each="tag:${question.tag.split(',')}">
+                                            <span class="glyphicon glyphicon-tags"> </span>
+                                            <span th:text="${tag}"></span>
+                                        </span>
+                                        <span class="viewfontformat viewfontformat-dot-big">•</span>
+                                        <span class="viewfontformat"><span th:text="${question.user.name}"></span>发起了问题</span>
+                                        <span class="viewfontformat">•</span>
+                                        <span class="viewfontformat"><span th:text="${question.commentCount}"></span>个回复</span>
+                                        <span class="viewfontformat">•</span>
+                                        <span class="viewfontformat"><span
+                                                th:text="${question.viewCount}"></span>次浏览</span>
+                                        <span class="viewfontformat">•</span>
+                                        <span class="viewfontformat"><span
+                                                th:text="${#dates.format(question.gmtModified,'yyyy-MM-dd HH:mm:ss')}"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="nav-right index-nav" aria-label="Page navigation">
+                    <ul class="pagination pagination-lg">
+                        <li th:if="${pageInfo.pageNum} &gt; 5" aria-label="Previous">
+                            <a th:href="@{/(pageNum=1)}" + aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pageInfo.hasPreviousPage}">
+                            <a th:href="@{/(pageNum=${pageInfo.getPrePage()})}">
+                                <span aria-hidden="true">&lsaquo;</span>
+                            </a>
+                        </li>
+                        <li th:each="pageNum:${pageInfo.navigatepageNums}"
+                            th:class="${pageInfo.pageNum == pageNum}? 'active' : ''">
+                            <a th:href="@{/(pageNum=
+			${pageNum})}" th:text="${pageNum}">
+                            </a>
+                        </li>
+                        <li th:if="${pageInfo.hasNextPage}">
+                            <a th:href="@{/(pageNum=
+			${pageInfo.getNextPage()})}">
+                                <span aria-hidden="true">&rsaquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pageInfo.pageNum < pageInfo.pages}" aria-label="Next">
+                            <a th:href="@{/(pageNum=
+			${pageInfo.total})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="alert alert-danger" style="margin-top:60px;" role="alert" th:if="${error != null}">
+                    <p th:text="${error}"></p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 main-right">
+                <div class="col-lg-12 col-md-12 col-sm-8 col-xs-8 hottopic-right-header">
+                    <h4>话题信息</h4>
+                    <br>
+                    <kbd>总问题数</kbd>: &nbsp;&nbsp;&nbsp;&nbsp;<code><span th:text="${hotTopicData.questionCount}"></span></code>
+                    <br><br>
+                    <kbd>总回复数</kbd>: &nbsp;&nbsp;&nbsp;&nbsp;<code><span th:text="${hotTopicData.commentCount}"></span></code>
+                    <br><br>
+                    <kbd>总阅读数</kbd>: &nbsp;&nbsp;&nbsp;&nbsp;<code><span
+                        th:text="${hotTopicData.viewCount}"></span></code>
+                </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 question-right-hr">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hottopic-right-header">
+                    <h4 class="hottopic-userwall-title">用户墙</h4>
+                    <span th:each="question:${questions}">
+                        <a href="#"><img class="hottopic-userwall img-circle" th:src="${question.user.avatarUrl}"></a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1 col-md-1"></div>
+    </div>
+</div>
+<div th:insert="~{footer :: foot}"></div>
+</body>
+</html>

@@ -34,14 +34,14 @@ public class PublishController {
         model.addAttribute("content", question.getContent());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", id);
-        model.addAttribute("selectTags", TagCache.get());
+        model.addAttribute("selectTags", TagCache.getHotTags());
 
         return "/publish";
     }
 
     @GetMapping("/publish")
     public String publish(Model model) {
-        model.addAttribute("selectTags", TagCache.get());
+        model.addAttribute("selectTags", TagCache.getHotTags());
         return "/publish";
     }
 
@@ -58,7 +58,7 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("content", content);
         model.addAttribute("tag", tag);
-        model.addAttribute("selectTags", TagCache.get());
+        model.addAttribute("selectTags", TagCache.getHotTags());
 
         if (id != null) {
             model.addAttribute("id", id);

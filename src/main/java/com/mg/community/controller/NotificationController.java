@@ -2,6 +2,7 @@ package com.mg.community.controller;
 
 import com.mg.community.enums.NotificationTypeEnum;
 import com.mg.community.model.Notification;
+import com.mg.community.model.User;
 import com.mg.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,5 +33,16 @@ public class NotificationController {
         }else{
             return "redirect:/";
         }
+    }
+
+    @RequestMapping(value = "/clear", method = RequestMethod.GET)
+    public String clearNotifications(Model model, HttpServletRequest request) {
+
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return "redirect:/";
+        }
+        notificationService.clearByReceiver(user);
+        return "redirect:/question/reply";
     }
 }

@@ -12,7 +12,6 @@
 (function() {
 
     var factory = function (exports) {
-
 		var pluginName   = "image-dialog";
 
 		exports.fn.imageDialog = function() {
@@ -154,15 +153,19 @@
                     loading(true);
 
                     var submitHandler = function() {
-
                         var uploadIframe = document.getElementById(iframeName);
 
                         uploadIframe.onload = function() {
-
                             loading(false);
 
                             var body = (uploadIframe.contentWindow ? uploadIframe.contentWindow : uploadIframe.contentDocument).document.body;
-                            var json = (body.innerText) ? body.innerText : ( (body.textContent) ? body.textContent : null);
+
+                            // Edited by MG 20191218  --- begin
+                            // Fix the bug for uploading file
+                            // var json = (body.innerText) ? body.innerText : ( (body.textContent) ? body.textContent : null);
+                            var jsonContainer = body.getElementsByTagName("pre")[0];
+                            var json = (jsonContainer.innerText) ? jsonContainer.innerText : ((jsonContainer.textContent) ? jsonContainer.textContent : null);
+                            // --- end
 
                             json = (typeof JSON.parse !== "undefined") ? JSON.parse(json) : eval("(" + json + ")");
 
@@ -171,6 +174,9 @@
                               if (json.success === 1)
                               {
                                   dialog.find("[data-url]").val(json.url);
+                                  // Edited by MG 20191218  --- begin
+                                  dialog.find("[data-link]").val(json.url);
+                                  // --- end
                               }
                               else
                               {

@@ -18,4 +18,8 @@ public interface QuestionExtMapper {
     List<Question> selectRelatedByTag(Question question);
     List<Question> selectByOrTitle(Question question);
     List<Question> selectByCreatorOrSearch(Question question);
+
+    List<Question> selectByTagWithSearchOByComment(Question question);
+
+    List<Question> selectByTagWithSearchOByView(Question question);
 }

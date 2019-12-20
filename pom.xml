@@ -113,9 +113,9 @@
             <version>5.2.4</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.flywaydb</groupId>-->
-            <!--<artifactId>flyway-core</artifactId>-->
-            <!--<version>4.1.0</version>-->
+        <!--<groupId>org.flywaydb</groupId>-->
+        <!--<artifactId>flyway-core</artifactId>-->
+        <!--<version>4.1.0</version>-->
         <!--</dependency>-->
 
 
@@ -130,6 +130,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
         </dependency>
 
     </dependencies>
@@ -146,9 +151,9 @@
                 <!--<artifactId>flyway-maven-plugin</artifactId>-->
                 <!--<version>4.0.3</version>-->
                 <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-maven-plugin -->
-                    <groupId>org.flywaydb</groupId>
-                    <artifactId>flyway-maven-plugin</artifactId>
-                    <version>5.2.4</version>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>5.2.4</version>
                 <!--<configuration>-->
                 <!--<url>jdbc:h2:~/mgdb</url>-->
                 <!--<user>sa</user>-->

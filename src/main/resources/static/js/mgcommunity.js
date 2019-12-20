@@ -228,3 +228,11 @@ function showSelectTags(){
     //显示标签框
     $("#selectTags").show();
 }
+
+function getHotTab(e) {
+    var tag = e.getAttribute("data-topic");
+    var id = e.getAttribute("data-id");
+    var url = "/hottopics/" + id + "?tag=" + tag;
+    window.open(url, "_self");
+    return true;
+}

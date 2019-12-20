@@ -9,7 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TagCache {
-    public static List<TagDTO> get(){
+
+    /**
+     * 获取首页热门标签
+     *
+     * @return
+     */
+    public static List<TagDTO> getHotTags() {
 
         List<TagDTO> tagDTOs = new ArrayList<>();
         TagDTO front = new TagDTO();
@@ -45,7 +51,7 @@ public class TagCache {
            return null;
         }
         String[] inputTags = StringUtils.split(tags, ",");
-        List<TagDTO> tagDTOS = get();
+        List<TagDTO> tagDTOS = getHotTags();
         List<String> tagListTmp = tagDTOS.stream().flatMap(t -> t.getTags().stream()).collect(Collectors.toList());
         List<String> tagList = tagListTmp.stream().distinct().collect(Collectors.toList());
         String invalidTags = Arrays.stream(inputTags).filter(u -> !tagList.contains(u)).collect(Collectors.joining(","));

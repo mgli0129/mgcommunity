@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/editormd.css">
     <script src="/js/jquery-1.12.4.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
-    <script src="/js/editormd.min.js"></script>
+    <script src="/js/editormd.js"></script>
     <script src="/js/mgcommunity.js"></script>
 </head>
 <body>
@@ -35,56 +35,7 @@
                         <textarea style="display:none;" name="content" id="content" class="form-control" rows="10"
                                   th:text="${content}"></textarea>
                     </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            var editor = editormd("question-editor", {
-                                width: "100%",
-                                height: 500,
-                                path: "/js/lib/",
-                                dialogMaskBgColor: "#000",
-                                lineNumbers: false,
-                                watch: false,
-                                delay: 0,
-                                placeholder: "问题补充 (必填，请参照右侧提示)",
-                                gotoLine: true,           // Enable / disable goto a line
-                                codeFold: true,
-                                dialogLockScreen: true,
-                                dialogShowMask: true,
-                                dialogDraggable: true,
-                                dialogMaskOpacity: 0.1,
-                                fontSize: "13px",
-                                saveHTMLToTextarea: true,
-                                imageUpload: true,          // Enable/disable upload
-                                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                                imageUploadURL: "",             // Upload url
-                                crossDomainUpload: false,          // Enable/disable Cross-domain upload
-                                uploadCallbackURL: "",             // Cross-domain upload callback url
 
-                                toc: true,           // Table of contents
-                                tocm: false,          // Using [TOCM], auto create ToC dropdown menu
-                                tocTitle: "",             // for ToC dropdown menu button
-                                tocDropdown: false,          // Enable/disable Table Of Contents dropdown menu
-                                tocContainer: "",             // Custom Table Of Contents Container Selector
-                                tocStartLevel: 1,              // Said from H1 to create ToC
-                                htmlDecode: false,          // Open the HTML tag identification
-                                pageBreak: true,           // Enable parse page break [========]
-                                atLink: true,           // for @link
-                                emailLink: true,           // for email address auto link
-                                taskList: false,          // Enable Github Flavored Markdown task lists
-                                emoji: true,          // :emoji: , Support Github emoji, Twitter Emoji (Twemoji);
-                                // Support FontAwesome icon emoji :fa-xxx: > Using fontAwesome icon web fonts;
-                                // Support Editor.md logo icon emoji :editormd-logo: :editormd-logo-1x: > 1~8x;
-                                tex: true,          // TeX(LaTeX), based on KaTeX
-                                flowChart: true,          // flowChart.js only support IE9+
-                                sequenceDiagram: true,          // sequenceDiagram.js only support IE9+
-                                previewCodeHighlight: true,           // Enable / disable code highlight of editor preview area
-
-                                toolbar: true,           // show or hide toolbar
-                                toolbarAutoFixed: true,           // on window scroll auto fixed position
-                                toolbarIcons: "full",         // Toolbar icons mode, options: full, simple, mini, See `editormd.toolbarModes` property.
-                            });
-                        });
-                    </script>
                     <div class="form-group">
                         <label for="tag">添加标签:</label>
                         <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}" autocomplete="off"
@@ -120,7 +71,7 @@
                 </form>
 
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="publish-right">
                 <br>
                 <h4>问题发起指南</h4>
                 <br>
@@ -135,5 +86,57 @@
     </div>
 </div>
 <div th:insert="~{footer :: foot}"></div>
+
+<script type="text/javascript">
+    $(function () {
+        var editor = editormd("question-editor", {
+            width: "100%",
+            height: 500,
+            path: "/js/lib/",
+            dialogMaskBgColor: "#000",
+            lineNumbers: false,
+            watch: false,
+            delay: 0,
+            placeholder: "问题补充 (必填，请参照右侧提示)",
+            gotoLine: true,           // Enable / disable goto a line
+            codeFold: true,
+            dialogLockScreen: true,
+            dialogShowMask: true,
+            dialogDraggable: true,
+            dialogMaskOpacity: 0.1,
+            fontSize: "13px",
+            saveHTMLToTextarea: true,
+            imageUpload: true,          // Enable/disable upload
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/upload",             // Upload url
+            crossDomainUpload: false,          // Enable/disable Cross-domain upload
+            uploadCallbackURL: "",             // Cross-domain upload callback url
+
+            toc: true,           // Table of contents
+            tocm: false,          // Using [TOCM], auto create ToC dropdown menu
+            tocTitle: "",             // for ToC dropdown menu button
+            tocDropdown: false,          // Enable/disable Table Of Contents dropdown menu
+            tocContainer: "",             // Custom Table Of Contents Container Selector
+            tocStartLevel: 1,              // Said from H1 to create ToC
+            htmlDecode: false,          // Open the HTML tag identification
+            pageBreak: true,           // Enable parse page break [========]
+            atLink: true,           // for @link
+            emailLink: true,           // for email address auto link
+            taskList: false,          // Enable Github Flavored Markdown task lists
+            emoji: true,          // :emoji: , Support Github emoji, Twitter Emoji (Twemoji);
+            // Support FontAwesome icon emoji :fa-xxx: > Using fontAwesome icon web fonts;
+            // Support Editor.md logo icon emoji :editormd-logo: :editormd-logo-1x: > 1~8x;
+            tex: true,          // TeX(LaTeX), based on KaTeX
+            flowChart: true,          // flowChart.js only support IE9+
+            sequenceDiagram: true,          // sequenceDiagram.js only support IE9+
+            previewCodeHighlight: true,           // Enable / disable code highlight of editor preview area
+
+            toolbar: true,           // show or hide toolbar
+            toolbarAutoFixed: true,           // on window scroll auto fixed position
+            toolbarIcons: "full",         // Toolbar icons mode, options: full, simple, mini, See `editormd.toolbarModes` property.
+        });
+    });
+</script>
+
 </body>
 </html>

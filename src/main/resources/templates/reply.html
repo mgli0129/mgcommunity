@@ -18,14 +18,18 @@
         <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 main">
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 main-left">
                 <br>
-                <h4>最新回复</h4>
-                <hr class="index-hr-top">
+                <h4 class="reply-title">最新回复</h4>
+                <div class="reply-all-read">
+                    <a class="btn btn-primary btn-xs reply-all-read-btn" href="/clear" role="button">全部已读</a>
+                </div>
+                <hr class="reply-hr-top">
                 <div class="media index-content" th:each="notification:${notifications}">
-                        <span th:text="${notification.notifierName}"> </span>
-                        <span th:text="${notification.notificationTypeName}"> </span>
+                    <span th:text="${notification.notifierName}"> </span>
+                    <span th:text="${notification.notificationTypeName}"> </span>
                     <a th:href="@{'/notify/' + ${notification.id}}"
                     <span th:text="${notification.notifyTitle}"></span></a>
-                    <span class="label label-danger index-font-size" th:text="${notification.notificationStatusName}"></span>
+                    <span class="label label-danger index-font-size"
+                          th:text="${notification.notificationStatusName}"></span>
                 </div>
                 <nav class="nav-right" aria-label="Page navigation">
                     <ul class="pagination pagination-lg">

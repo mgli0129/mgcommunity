@@ -67,4 +67,34 @@
         </where>
         order by GMT_CREATE DESC
     </select>
+
+    <!--通过标签和查找项查询所有问题清单，且按回复数进行排序；-->
+    <select id="selectByTagWithSearchOByComment" parameterType="com.mg.community.model.Question"
+            resultMap="BaseResultMap">
+        select * from QUESTION
+        <where>
+            <if test="tag != null">
+                TAG REGEXP #{tag}
+            </if>
+            <if test="title != null">
+                TITLE REGEXP #{title}
+            </if>
+        </where>
+        order by COMMENT_COUNT DESC
+    </select>
+
+    <!--通过标签和查找项查询所有问题清单，且按阅读数进行排序；-->
+    <select id="selectByTagWithSearchOByView" parameterType="com.mg.community.model.Question" resultMap="BaseResultMap">
+        select * from QUESTION
+        <where>
+            <if test="tag != null">
+                TAG REGEXP #{tag}
+            </if>
+            <if test="title != null">
+                TITLE REGEXP #{title}
+            </if>
+        </where>
+        order by VIEW_COUNT DESC
+    </select>
+
 </mapper>

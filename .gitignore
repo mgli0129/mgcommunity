@@ -32,3 +32,6 @@ build/
 
 ### log ###
 /logs/
+
+### upload files ###
+/src/main/resources/static/upload
