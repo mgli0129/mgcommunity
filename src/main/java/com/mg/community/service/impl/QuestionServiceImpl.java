@@ -170,6 +170,7 @@ public class QuestionServiceImpl implements QuestionService {
         hotTopicDataDTO.setQuestionCount(questionCount);
         hotTopicDataDTO.setCommentCount(commentCount);
         hotTopicDataDTO.setViewCount(viewCount);
+        hotTopicDataDTO.setTag(question.getTag());
 
         return hotTopicDataDTO;
     }

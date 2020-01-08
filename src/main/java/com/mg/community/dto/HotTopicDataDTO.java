@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class HotTopicDataDTO {
 
+    private String tag;
+
     /**
      * 问题总数
      */

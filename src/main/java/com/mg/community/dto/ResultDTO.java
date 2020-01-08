@@ -31,6 +31,17 @@ public class ResultDTO<T> {
         return errorOf(e.getCode(),e.getMessage());
     }
 
+    /**
+     * 附带自定义错误内容
+     * @param errorCode
+     * @param additionalmsg
+     * @return
+     */
+    public static ResultDTO errorOf(CustomizeErrorCode errorCode, String additionalmsg) {
+        String errorMsg = errorCode.getMessage() + "---" +additionalmsg;
+        return errorOf(errorCode.getCode(),errorMsg);
+    }
+
     public static ResultDTO okOf() {
         return errorOf(CustomizeErrorCode.SUCCESS);
     }

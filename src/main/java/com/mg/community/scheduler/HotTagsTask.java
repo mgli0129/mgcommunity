@@ -1,7 +1,9 @@
 package com.mg.community.scheduler;
 
 import com.github.pagehelper.PageHelper;
+import com.mg.community.cache.HotTopicsDataCache;
 import com.mg.community.cache.PriorityCache;
+import com.mg.community.dto.HotTopicDataDTO;
 import com.mg.community.model.Question;
 import com.mg.community.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName HotTagsTask
@@ -28,6 +31,9 @@ public class HotTagsTask {
 
     @Autowired
     private PriorityCache priorityCache;
+
+    @Autowired
+    private HotTopicsDataCache hotTopicsDataCache;
 
     /**
      * 热门话题的权值计算公式：
@@ -67,6 +73,14 @@ public class HotTagsTask {
         priorityCache.sortPriorites(priorities);
 
         log.info("getHotTopics stop: {}", new Date());
+    }
+
+    /**
+     * 获取热门话题的统计信息，每4个小时更新一次
+     */
+    @Scheduled(fixedRate = 1000*60*60*4)
+    public void getHotTopicData() {
+        hotTopicsDataCache.getDatas();
     }
 
 }

@@ -3,12 +3,14 @@ package com.mg.community.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mg.community.cache.HotTabCache;
+import com.mg.community.cache.HotTopicsDataCache;
 import com.mg.community.cache.PriorityCache;
 import com.mg.community.dto.HotTopicDataDTO;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.model.Question;
 import com.mg.community.service.QuestionService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,9 @@ public class HotTopicsController {
 
     @Autowired
     private PriorityCache priorityCache;
+
+    @Autowired
+    private HotTopicsDataCache hotTopicsDataCache;
 
     @GetMapping("/hottopics/{id}")
     public String getHotTopics(@PathVariable(value = "id", required = false) int id,
@@ -75,15 +80,19 @@ public class HotTopicsController {
         List<QuestionDTO> questionDTOs = questionService.findAllDTO(questions);
 
         //获取热门话题统计信息
-        HotTopicDataDTO hotTopicData = questionService.getHotTopicDatas(question);
+        if (StringUtils.isNotBlank(tag)) {
+            HotTopicDataDTO hotTopicData = hotTopicsDataCache.getCurrentData(tag);
+            if (hotTopicData != null) {
+                model.addAttribute("hotTopicData", hotTopicData);
+            }
+            model.addAttribute("topic", tag);
+        }
 
         model.addAttribute("questions", questionDTOs);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("search", search);
         model.addAttribute("tabs", HotTabCache.getHotTopicTabs());
-        model.addAttribute("topic", tag);
         model.addAttribute("id", id);
-        model.addAttribute("hotTopicData", hotTopicData);
 
         return "/hottopics";
     }

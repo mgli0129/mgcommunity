@@ -11,6 +11,11 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode{
     TYPE_PARAM_NOT_FOUND("2005","回复的类型不存在"),
     CONTENT_IS_EMPTY("2006","评论的内容不能为空"),
     FILE_UPLOAD_FAILURE("2007", "文件上传失败"),
+    PUBLISH_TITLE_EMPTY("2501", "发布的标题不能为空"),
+    PUBLISH_CONTENT_EMPTY("2502", "发布的问题补充不能为空"),
+    PUBLISH_TAG_INVALID("2503", "发布的标签不合法"),
+
+
     ;
 
     private String code;
