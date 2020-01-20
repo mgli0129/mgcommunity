@@ -15,7 +15,7 @@ public class BootStrapTestController {
 
     @GetMapping("/test")
     public String testB(){
-        return "/test";
+        return "test";
     }
 
 }

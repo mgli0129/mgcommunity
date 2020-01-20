@@ -25,9 +25,22 @@
         <profile>
             <id>dev</id>
             <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
                 <db.url>jdbc:mysql://localhost:3306/mgdb</db.url>
                 <db.user>root</db.user>
                 <db.password>wood123</db.password>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prd</id>
+            <properties>
+                <spring.profiles.active>prd</spring.profiles.active>
+                <db.url>jdbc:mysql://192.168.31.196:3306/mgdb</db.url>
+                <db.user>root</db.user>
+                <db.password>Wood%123</db.password>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -140,6 +153,9 @@
     </dependencies>
 
     <build>
+        <filters>
+            <filter>${basedir}/src/main/resources/config/application-${spring.profiles.active}.properties</filter>
+        </filters>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

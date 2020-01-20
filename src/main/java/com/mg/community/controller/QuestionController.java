@@ -51,7 +51,7 @@ public class QuestionController {
         model.addAttribute("comments", comments);
         model.addAttribute("relatedQuestions", relatedQuestions);
         model.addAttribute("toptitle", "【问题】---MG-COMMUNITY");
-        return "/questiondetail";
+        return "questiondetail";
     }
 
     @PostMapping("/reply/{id}")
@@ -83,7 +83,7 @@ public class QuestionController {
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("search", search);
 
-        return "/question";
+        return "question";
     }
 
     @GetMapping("/question/reply")
@@ -100,7 +100,7 @@ public class QuestionController {
 
         model.addAttribute("notifications", notifications);
         model.addAttribute("pageInfo", pageInfo);
-        return "/reply";
+        return "reply";
     }
 
 }

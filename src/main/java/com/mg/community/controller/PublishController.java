@@ -36,13 +36,13 @@ public class PublishController {
         model.addAttribute("id", id);
         model.addAttribute("selectTags", TagCache.getHotTags());
 
-        return "/publish";
+        return "publish";
     }
 
     @GetMapping("/publish")
     public String publish(Model model) {
         model.addAttribute("selectTags", TagCache.getHotTags());
-        return "/publish";
+        return "publish";
     }
 
     @PostMapping("/publish")
@@ -67,24 +67,24 @@ public class PublishController {
         //校验页面字段
         if (title == null || title.equals("")) {
             model.addAttribute("error", "问题标题不能为空");
-            return "/publish";
+            return "publish";
         }
 
         if (content == null || content.equals("")) {
             model.addAttribute("error", "问题补充不能为空");
-            return "/publish";
+            return "publish";
         }
 
         if (tag == null || tag.trim().equals("") || tag.trim().equals(",")) {
             model.addAttribute("error", "标签不合法");
             model.addAttribute("tag", "");
-            return "/publish";
+            return "publish";
         }
 
         String checkInvalidTag = TagCache.checkInvalid(tag);
         if (!StringUtils.isBlank(checkInvalidTag)) {
             model.addAttribute("error", "标签不合法:" + checkInvalidTag);
-            return "/publish";
+            return "publish";
         }
 
         //处理tag多余的逗号

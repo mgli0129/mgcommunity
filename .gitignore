@@ -35,3 +35,7 @@ build/
 
 ### upload files ###
 /src/main/resources/static/upload
+
+### configuration ###
+*.properties
+*.pom

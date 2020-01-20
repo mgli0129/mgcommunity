@@ -94,6 +94,6 @@ public class HotTopicsController {
         model.addAttribute("tabs", HotTabCache.getHotTopicTabs());
         model.addAttribute("id", id);
 
-        return "/hottopics";
+        return "hottopics";
     }
 }
