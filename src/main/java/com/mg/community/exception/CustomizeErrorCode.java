@@ -14,6 +14,7 @@ public enum CustomizeErrorCode implements ICustomizeErrorCode{
     PUBLISH_TITLE_EMPTY("2501", "发布的标题不能为空"),
     PUBLISH_CONTENT_EMPTY("2502", "发布的问题补充不能为空"),
     PUBLISH_TAG_INVALID("2503", "发布的标签不合法"),
+    GET_ENVIRONMENT_ERROR("3001", "获取环境信息异常"),
 
 
     ;
