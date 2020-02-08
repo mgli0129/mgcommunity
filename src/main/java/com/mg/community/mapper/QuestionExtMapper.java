@@ -13,6 +13,8 @@ public interface QuestionExtMapper {
      */
     int incView(Question record);
 
+    int setNewView(Question record);
+
     int incComment(Question question);
 
     List<Question> selectRelatedByTag(Question question);

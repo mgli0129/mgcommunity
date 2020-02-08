@@ -2,13 +2,14 @@ package com.mg.community.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mg.community.cache.PriorityCache;
+import com.mg.community.cache.HotTopicsCache;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.model.Question;
 import com.mg.community.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class IndexController {
     private QuestionService questionService;
 
     @Autowired
-    private PriorityCache priorityCache;
+    private HotTopicsCache hotTopicsCache;
 
     @GetMapping("/")
     public String index(@RequestParam(value = "pageNum", required = false, defaultValue = "1") int pageNum,
@@ -47,7 +48,7 @@ public class IndexController {
         List<QuestionDTO> questionDTOs = questionService.findAllDTO(questions);
 
         //获取热门话题
-        List<String> hotTopics = priorityCache.getHots();
+        List<String> hotTopics=hotTopicsCache.getHots();
 
         model.addAttribute("questions", questionDTOs);
         model.addAttribute("pageInfo", pageInfo);

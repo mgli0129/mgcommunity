@@ -2,6 +2,7 @@ package com.mg.community.controller;
 
 import com.mg.community.dto.CommentDTO;
 import com.mg.community.dto.CommentInputDTO;
+import com.mg.community.dto.QuestionDTO;
 import com.mg.community.dto.ResultDTO;
 import com.mg.community.enums.CommentTypeEnum;
 import com.mg.community.exception.CustomizeErrorCode;
@@ -9,6 +10,7 @@ import com.mg.community.model.Comment;
 import com.mg.community.model.User;
 import com.mg.community.service.CommentService;
 import com.mg.community.service.QuestionService;
+import com.mg.community.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@ public class CommentController {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 回复问题或者评论
@@ -50,6 +55,16 @@ public class CommentController {
         comment.setType(commentInputDTO.getType());
         comment.setCommentator(user.getId());
         commentService.createOrUpdate(comment, user);
+
+        //更新Redis中的comments数据
+        if(redisUtil.testConnection()){
+            QuestionDTO questionDTO = (QuestionDTO) redisUtil.hget(redisUtil.QUESTION, commentInputDTO.getParentId().toString());
+            if(questionDTO != null){
+                List<CommentDTO> comments = commentService.listByTargetId(questionDTO.getId(), CommentTypeEnum.QUESTION.getType());
+                redisUtil.hset(redisUtil.COMMENTS, questionDTO.getId().toString(), comments);
+            }
+        }
+
         return ResultDTO.okOf();
     }
 

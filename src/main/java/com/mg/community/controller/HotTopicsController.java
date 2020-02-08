@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mg.community.cache.HotTabCache;
 import com.mg.community.cache.HotTopicsDataCache;
-import com.mg.community.cache.PriorityCache;
+import com.mg.community.cache.HotTopicsCache;
 import com.mg.community.dto.HotTopicDataDTO;
 import com.mg.community.dto.QuestionDTO;
 import com.mg.community.model.Question;
@@ -37,7 +37,7 @@ public class HotTopicsController {
     private QuestionService questionService;
 
     @Autowired
-    private PriorityCache priorityCache;
+    private HotTopicsCache hotTopicsCache;
 
     @Autowired
     private HotTopicsDataCache hotTopicsDataCache;

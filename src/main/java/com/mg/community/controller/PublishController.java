@@ -5,6 +5,7 @@ import com.mg.community.dto.QuestionDTO;
 import com.mg.community.model.Question;
 import com.mg.community.model.User;
 import com.mg.community.service.QuestionService;
+import com.mg.community.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,15 +25,30 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Long id,
                        Model model) {
-        QuestionDTO question = questionService.findDTOById(id);
+
+        QuestionDTO questionDTO=null;
+        //先从Redis中获取，若不存在，再从数据库中读取
+        if(redisUtil.testConnection()) {
+            questionDTO = (QuestionDTO) redisUtil.hget(redisUtil.QUESTION, id.toString());
+        }
+
+        if(questionDTO == null){
+            questionDTO = questionService.findDTOById(id);
+            if(redisUtil.testConnection()) {
+                redisUtil.hset(redisUtil.QUESTION, id.toString(), questionDTO);
+            }
+        }
 
         //页面回显字段信息
-        model.addAttribute("title", question.getTitle());
-        model.addAttribute("content", question.getContent());
-        model.addAttribute("tag", question.getTag());
+        model.addAttribute("title", questionDTO.getTitle());
+        model.addAttribute("content", questionDTO.getContent());
+        model.addAttribute("tag", questionDTO.getTag());
         model.addAttribute("id", id);
         model.addAttribute("selectTags", TagCache.getHotTags());
 
@@ -104,6 +120,14 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setId(id);
         questionService.createOrUpdate(question);
+
+        //更新Redis中question数据
+        if(id !=null && redisUtil.testConnection()){
+            QuestionDTO questionDTO = questionService.findDTOById(id);
+            redisUtil.hset(redisUtil.QUESTION, id.toString(), questionDTO);
+
+            //是否需要更新相关问题，此部分暂不考虑，因为相关问题一天更新一次也是可以的；
+        }
 
         return "redirect:/";
     }

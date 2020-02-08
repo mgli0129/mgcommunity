@@ -56,15 +56,16 @@ public class QuestionServiceImpl implements QuestionService {
         if (questions == null) {
             return null;
         }
-        List<QuestionDTO> questionDTOs = new ArrayList<QuestionDTO>();
-        for (Question question : questions) {
+
+        List<QuestionDTO> questionDTOs = questions.stream().map(q -> {
             QuestionDTO questionDTO = new QuestionDTO();
             //copy object
-            BeanUtils.copyProperties(question, questionDTO);
-            User user = userService.findById(question.getCreator());
+            BeanUtils.copyProperties(q, questionDTO);
+            User user = userService.findById(q.getCreator());
             questionDTO.setUser(user);
-            questionDTOs.add(questionDTO);
-        }
+            return questionDTO;
+        }).collect(Collectors.toList());
+
         return questionDTOs;
     }
 
@@ -80,6 +81,9 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDTO findDTOById(Long id) {
         QuestionDTO questionDTO = new QuestionDTO();
         Question question = findById(id);
+        if (question == null) {
+            return null;
+        }
         //copy object
         BeanUtils.copyProperties(question, questionDTO);
         User user = userService.findById(question.getCreator());
@@ -92,7 +96,7 @@ public class QuestionServiceImpl implements QuestionService {
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andIdEqualTo(id);
         List<Question> questions = questionMapper.selectByExampleWithBLOBs(questionExample);
-        if (questions == null) {
+        if (questions == null || questions.size() == 0) {
             return null;
         }
         Question question = questions.get(0);
@@ -120,9 +124,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void incView(Question question) {
-        question.setId(question.getId());
         question.setViewCount(1L);
         questionExtMapper.incView(question);
+    }
+
+    @Override
+    public void setNewView(Question question) {
+        questionExtMapper.setNewView(question);
     }
 
     @Override
@@ -134,7 +142,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionDTO> findRelatedByTag(QuestionDTO qdto) {
-        if (StringUtils.isBlank(qdto.getTag())) {
+        if (qdto == null || StringUtils.isBlank(qdto.getTag())) {
             return new ArrayList<>();
         }
         String[] tags = StringUtils.split(qdto.getTag(), ",");

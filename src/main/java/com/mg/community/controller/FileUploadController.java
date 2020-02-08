@@ -33,6 +33,9 @@ import java.util.UUID;
  * 2. Markdown editor会通过js调用后台的服务；
  * 3. 后台服务里，可以通过MultipartHttpServletRequest强转HttpServletRequest对象，再由MultipartHttpServletRequest对象获取上传的文件，返回MultipartFile类型；
  * 4. 后续的处理为正常的文件流方式；
+ * 或者：
+ * 3. 直接使用MultipartFile 接收上传的文件；
+ * 4. 后续使用transferTo上传文件；
  * @Author MGLi
  * @Date 2019/12/18 10:45
  * @Version 1.0

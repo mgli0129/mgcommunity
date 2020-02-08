@@ -33,6 +33,13 @@
         where ID = #{id,jdbcType=INTEGER}
     </update>
 
+    <update id="setNewView" parameterType="com.mg.community.model.Question">
+        update QUESTION
+        set
+        VIEW_COUNT = #{viewCount,jdbcType=INTEGER}
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+
     <update id="incComment" parameterType="com.mg.community.model.Question">
         update QUESTION
         set
