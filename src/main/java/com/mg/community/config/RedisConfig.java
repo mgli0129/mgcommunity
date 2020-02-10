@@ -3,6 +3,8 @@ package com.mg.community.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,12 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPoolConfig;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @ClassName RedisConfig
@@ -21,7 +29,43 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 @Configuration
 @EnableCaching //开启注解
+//@ConditionalOnClass({JedisCluster.class})
 public class RedisConfig extends CachingConfigurerSupport {
+
+    /*
+    @Value("${spring.redis.cluster.nodes}")
+    private String clusterNodes;
+
+    @Value("${spring.redis.timeout}")
+    private int timeout;
+
+    @Value("${spring.redis.pool.max-idle}")
+    private int maxIdle;
+
+    @Value("${spring.redis.pool.max-wait}")
+    private long maxWaitMillis;
+
+    @Value("${spring.redis.commandTimeout}")
+    private int commandTimeout;
+
+    @Bean
+    public JedisCluster getJedisCluster() {
+        String[] cNodes = clusterNodes.split(",");
+        Set<HostAndPort> nodes = new HashSet<>();
+        //分割出集群节点
+        for (String node : cNodes) {
+            String[] hp = node.split(":");
+            nodes.add(new HostAndPort(hp[0].trim(), Integer.valueOf(hp[1].trim())));
+        }
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxIdle(maxIdle);
+        jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
+
+        //创建集群对象
+        return new JedisCluster(nodes, commandTimeout, jedisPoolConfig);
+    }
+
+    */
 
     /**
      * retemplate相关配置
@@ -34,7 +78,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         // 配置连接工厂
         template.setConnectionFactory(factory);
-
         //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
         Jackson2JsonRedisSerializer jacksonSeial = new Jackson2JsonRedisSerializer(Object.class);
 
